@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: hobsons-cms-dev
+ spec:
+   selector:
+     matchLabels:
+       app: hobsons-cms-dev
+   replicas: 2
+   strategy:
+     rollingUpdate:
+       maxSurge: 1
+       maxUnavailable: 1
+   minReadySeconds: 5
+   template:
+     metadata:
+       annotations:
+         fluentbit.io/parser: nginx
+       labels:
+         app: hobsons-cms-dev
+     spec:
+       containers:
+       - name: diversey-cms-prod
+         image: drupal:8.6
+         ports:
+         - containerPort: 80
+         resources:
+           limits:
+             cpu: "1"
+             memory: 2Gi
+           requests:
+             cpu: 256m
+             memory: 256Mi
+         imagePullPolicy: Always
+
+
+
+         apiVersion: v1
+ kind: Service
+ metadata:
+   name: hobsons-cms-dev
+ spec:
+   type: LoadBalancer
+   ports:
+   - name: http
+     port: 80
+     protocol: TCP
+     targetPort: 80
+   selector:
+     app: hobsons-cms-dev
+         

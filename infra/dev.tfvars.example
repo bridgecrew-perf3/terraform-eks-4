@@ -1,0 +1,98 @@
+shared_credentials_file = "~/.aws/credentials"
+profile                 = "default"
+region                  = "us-west-2"
+
+#### For VPC ########
+cidr_block  = "10.58.0.0/16"
+name        = "example"
+environment = "dev"
+additional_tags = {
+  "Created by" = "DevOps"
+}
+#### Public Subent  #####
+availability_zones = ["us-west-2a", "us-west-2b", "us-west-2c"]
+public_subnets     = ["10.58.1.0/24", "10.58.2.0/24", "10.58.4.0/24"]
+
+##### Master Subnets  ####
+create_nat             = true
+master_private_subnets = ["10.58.6.0/23", "10.58.8.0/23", "10.58.10.0/23"]
+tier                   = "master"
+
+### For worker_nodes ###
+worker_nodes_private_subnets = ["10.58.24.0/23", "10.58.26.0/23", "10.58.28.0/23"]
+create_nat_for_nodes         = false
+
+### For Database #####
+database_private_subnets = ["10.58.60.0/24", "10.58.62.0/24", "10.58.64.0/24"]
+
+#### For EKS Cluster ##### 
+create_eks              = true
+k8s_version             = 1.17
+endpoint_private_access = true
+endpoint_public_access  = true
+public_access_cidrs     = ["188.39.168.58/32", "183.82.122.240/32", "223.230.79.82/32", "183.82.101.200/32", "117.98.155.183/32"]
+
+############ Node Group Details #######
+
+node_group_name = "dev"
+release_version = "1.17.9-20200723"
+scaling_config = {
+  "desired_size" = 3
+  "max_size"     = 6
+  "min_size"     = 3
+}
+disk_size      = 40
+instance_types = ["t2.medium"]
+labels = {
+  "node_group" = "dev-stage"
+}
+
+#### For RDS ######
+
+instance_type           = "db.t2.medium"
+database_name           = "test"
+backup_retention_period = 30
+replica_scale_enabled   = false
+replica_count           = 2
+
+################# NameSpaces ##########
+
+namespace = {
+  "internal-ingress" = {
+    "annotations" = {
+    },
+    "labels" = {
+      name = "internal-ingress"
+    }
+  },
+  "external-ingress" = {
+    "annotations" = {
+    },
+    "labels" = {
+      name = "external-ingress"
+    }
+  },
+  "logging" = {
+    "annotations" = {
+    },
+    "labels" = {
+      name = "logging"
+    }
+  },
+  "monitoring" = {
+    "annotations" = {
+    },
+    "labels" = {
+      name = "monitoring"
+    }
+  },
+  "moby-dev" = {
+    "annotations" = {
+    },
+    "labels" = {
+      name = "moby-dev"
+    }
+  }
+}
+
+create_kube_config = true
